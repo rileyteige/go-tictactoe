@@ -5,14 +5,33 @@ import (
 	"net/http"
 )
 
+type Team string
+
+const (
+	X = Team("X")
+	O = Team("O")
+)
+
+type Player struct {
+	Id   Guid
+	Team Team
+}
+
 type Game struct {
 	Id Guid
+	X  Guid
+	O  Guid
+}
+
+type PlayerGame struct {
+	Game   Guid
+	Player Player
 }
 
 var games = map[Guid]*Game{}
 
 type StartParameters struct {
-	Player string
+	Team string
 }
 
 func newGame() (game *Game) {
@@ -43,9 +62,61 @@ func startGame(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("Starting game with player %v\n", args.Player)
+	fmt.Printf("Starting game with player %v\n", args.Team)
 
+	team, playerId := Team(args.Team), generateGuid()
 	game := newGame()
+	switch team {
+	case X:
+		game.X = playerId
+	case O:
+		game.O = playerId
+	}
 
-	writeJson(w, game)
+	pg := PlayerGame{Game: game.Id, Player: Player{Id: playerId, Team: team}}
+
+	writeJson(w, pg)
+}
+
+type JoinParameters struct {
+	Team string
+	Game Guid
+}
+
+func joinGame(w http.ResponseWriter, r *http.Request) {
+	var args JoinParameters
+	err := readJson(r, &args)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+
+	fmt.Printf("Player %v joining game %v\n", args.Team, args.Game)
+
+	team, playerId := Team(args.Team), generateGuid()
+	game := games[args.Game]
+	if game == nil {
+		http.NotFound(w, r)
+		return
+	}
+
+	switch team {
+	case X:
+		if game.X != "" {
+			errorStandardText(w, http.StatusForbidden)
+			return
+		}
+
+		game.X = playerId
+	case O:
+		if game.O != "" {
+			errorStandardText(w, http.StatusForbidden)
+			return
+		}
+
+		game.O = playerId
+	}
+
+	pg := PlayerGame{Game: game.Id, Player: Player{Id: playerId, Team: team}}
+	writeJson(w, pg)
 }

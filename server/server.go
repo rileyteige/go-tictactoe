@@ -47,6 +47,10 @@ func readJson(r *http.Request, v interface{}) error {
 	return json.Unmarshal(data, v)
 }
 
+func errorStandardText(w http.ResponseWriter, statusCode int) {
+	http.Error(w, http.StatusText(statusCode), statusCode)
+}
+
 func errorMethodNotAllowed(w http.ResponseWriter) {
 	http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 }

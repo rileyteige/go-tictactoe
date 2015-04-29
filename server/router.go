@@ -15,6 +15,7 @@ func buildRouter() http.Handler {
 	r.HandleFunc("/ping", ping).Methods(methodGet)
 	r.HandleFunc("/game", startGame).Methods(methodPost)
 	r.HandleFunc("/game/{id}", getGame).Methods(methodGet)
+	r.HandleFunc("/game", joinGame).Methods(methodPut)
 
 	return r
 }

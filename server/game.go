@@ -18,9 +18,10 @@ type Player struct {
 }
 
 type Game struct {
-	Id Guid
-	X  Guid
-	O  Guid
+	Id      Guid
+	Current Team
+	X       Guid
+	O       Guid
 }
 
 type PlayerGame struct {
@@ -37,6 +38,7 @@ type StartParameters struct {
 func newGame() (game *Game) {
 	game = new(Game)
 	game.Id = generateGuid()
+	game.Current = X
 	games[game.Id] = game
 	return
 }

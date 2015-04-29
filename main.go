@@ -3,8 +3,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/rileyteige/go-tictactoe/server"
 	"log"
-	"server"
 )
 
 const port = 8080

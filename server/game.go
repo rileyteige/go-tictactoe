@@ -39,13 +39,19 @@ func newGame() (game *Game) {
 	game = new(Game)
 	game.Id = generateGuid()
 	game.Current = X
+	game.X = emptyGuid()
+	game.O = emptyGuid()
 	games[game.Id] = game
 	return
 }
 
 func getGame(w http.ResponseWriter, r *http.Request) {
 	vars := pullVars(r)
-	id := Guid(vars["id"])
+	id, err := parseGuid(vars["id"])
+	if err != nil {
+		errorStandardText(w, http.StatusBadRequest)
+		return
+	}
 
 	game := games[id]
 	if game == nil {
@@ -104,14 +110,14 @@ func joinGame(w http.ResponseWriter, r *http.Request) {
 
 	switch team {
 	case X:
-		if game.X != "" {
+		if game.X != emptyGuid() {
 			errorStandardText(w, http.StatusForbidden)
 			return
 		}
 
 		game.X = playerId
 	case O:
-		if game.O != "" {
+		if game.O != emptyGuid() {
 			errorStandardText(w, http.StatusForbidden)
 			return
 		}

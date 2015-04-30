@@ -1,7 +1,6 @@
 package server
 
 import (
-	"crypto/rand"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -14,15 +13,6 @@ const (
 	methodPut    = "PUT"
 	methodDelete = "DELETE"
 )
-
-type Guid string
-
-func generateGuid() Guid {
-	b := make([]byte, 16)
-	rand.Read(b)
-
-	return Guid(fmt.Sprintf("%x-%x-%x-%x-%x", b[0:4], b[4:6], b[6:8], b[8:10], b[10:]))
-}
 
 func writeJson(w http.ResponseWriter, v interface{}) error {
 	data, err := json.Marshal(v)
@@ -57,7 +47,7 @@ func errorMethodNotAllowed(w http.ResponseWriter) {
 
 func initRequest(f http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("Received %v request for %v\n", r.Method, r.URL)
+		fmt.Printf("Received %v requestsieds for %v\n", r.Method, r.URL)
 		f.ServeHTTP(w, r)
 	}
 }

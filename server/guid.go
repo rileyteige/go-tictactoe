@@ -15,7 +15,7 @@ func emptyGuid() Guid {
 
 func generateGuid() Guid {
 	id, err := uuid.NewV4()
-	if err == nil {
+	if err != nil {
 		log.Fatal(err)
 	}
 

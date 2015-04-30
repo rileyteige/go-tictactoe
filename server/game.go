@@ -32,7 +32,7 @@ type PlayerGame struct {
 var games = map[Guid]*Game{}
 
 type StartParameters struct {
-	Team string
+	Team Team
 }
 
 func newGame() (game *Game) {

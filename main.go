@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-const port = 8080
+const port = 8081
 
 func main() {
 	fmt.Printf("Starting Tic-Tac-Toe server on port %v...\n", port)

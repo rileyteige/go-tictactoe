@@ -39,8 +39,8 @@ func newGame() (game *Game) {
 	game = new(Game)
 	game.Id = generateGuid()
 	game.Current = X
-	game.X = emptyGuid()
-	game.O = emptyGuid()
+	game.X = EmptyGuid
+	game.O = EmptyGuid
 	games[game.Id] = game
 	return
 }
@@ -110,14 +110,14 @@ func joinGame(w http.ResponseWriter, r *http.Request) {
 
 	switch team {
 	case X:
-		if game.X != emptyGuid() {
+		if game.X != EmptyGuid {
 			errorStandardText(w, http.StatusForbidden)
 			return
 		}
 
 		game.X = playerId
 	case O:
-		if game.O != emptyGuid() {
+		if game.O != EmptyGuid {
 			errorStandardText(w, http.StatusForbidden)
 			return
 		}

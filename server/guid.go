@@ -5,13 +5,9 @@ import (
 	"log"
 )
 
-type Guid uuid.UUID
+type Guid string
 
-func emptyGuid() Guid {
-	const empty = "00000000-0000-0000-0000-000000000000"
-	id, _ := parseGuid(empty)
-	return id
-}
+const EmptyGuid = Guid("00000000-0000-0000-0000-000000000000")
 
 func generateGuid() Guid {
 	id, err := uuid.NewV4()
@@ -19,7 +15,7 @@ func generateGuid() Guid {
 		log.Fatal(err)
 	}
 
-	return Guid(*id)
+	return Guid(id.String())
 }
 
 func parseGuid(s string) (Guid, error) {
@@ -28,5 +24,5 @@ func parseGuid(s string) (Guid, error) {
 		return generateGuid(), err
 	}
 
-	return Guid(*id), nil
+	return Guid(id.String()), nil
 }

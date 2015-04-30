@@ -47,7 +47,7 @@ func errorMethodNotAllowed(w http.ResponseWriter) {
 
 func initRequest(f http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("Received %v requestsieds for %v\n", r.Method, r.URL)
+		fmt.Printf("Received %v request for %v\n", r.Method, r.URL)
 		f.ServeHTTP(w, r)
 	}
 }
